@@ -1,39 +1,62 @@
 import React, {Component} from 'react';
+import TrenerList from './TrenerList';
 
 class Trener extends Component{
     constructor(props){
         super(props);
         this.state={
-            visible: false
+            visible: false,
+            name:["Крутой","Добрый","Злой","Дешевый"],
+            cln: "Li_list-none",
+            choice: "",
         }
     }
 
-    show = () => {
-        this.setState({visible: !this.state.visible})
+    // show = () => {
+    //     this.setState({visible: !this.state.visible})
+    // };
+
+    addTrener = (e) => {
+        console.log(this.state.choice);
+        alert (`Вы выбрали тренера ${this.state.choice}`);
     };
 
-    addTrener = () => {
-        alert ("Добавлено");
+
+
+
+
+    applyTrainer = (e) => {
+        this.setState({
+            choice: e.target.innerText
+        });
+        console.log(e.target);
     };
+
+
+
+    showList = () =>{
+        if (this.state.cln === "Li_list-none") {
+            this.setState({cln: "Li_list"})
+        }else {this.setState({cln: "Li_list-none"})}
+
+
+
+    };
+
 
     render(){
         return(
             <div>
             <div className="wrapper">
                 <h3>ВЫБОР ТРЕНЕРА</h3>
-                <div>
-                <input onClick={this.show} placeholder="Выбор тренера"  />
-                {this.state.visible
-                &&
-                <ul className="TrenerList">
-                        <li className="Li_list">Крутой</li>
-                        <li className="Li_list">Добрый</li>
-                        <li className="Li_list">Злой</li>
-                        <li className="Li_list">Дешевый</li>
-                </ul>
-                }
-                </div>
-                <button onClick={this.addTrener}>Добавить</button>
+
+                <input onClick={this.showList} placeholder="Выбор тренера"  />
+
+                {this.state.name.map((name, index) => {
+                    return(<TrenerList cln={this.state.cln} applyTrainer={this.applyTrainer} name={name} />)
+                })}
+
+                <div><button onClick={this.addTrener}>Добавить</button></div>
 
 
             </div>

@@ -56,6 +56,7 @@ class News extends Component {
         return (
             <div className='post-list'>
                 {this.state.posts.map((post,index)=>{
+
                     return <Post header={post.header} likes={post.likes} likeP={()=>{this.addLike(index)}}>{post.content} <button onClick={()=>{this.minusLike(index)}}>MINUS LIKES</button> </Post>
 
                 })}
