@@ -1,51 +1,65 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Switch,
-    Link, NavLink, Redirect}
+import {BrowserRouter as Router, Route, Switch, Redirect}
     from 'react-router-dom';
-import logo from './logo.svg';
-import './App.css';
 import News from "./components/News";
 import CrossFit from "./components/CrossFit";
 import Training from "./components/training";
+import Login, {Logout, Signup} from "./components/Login";
+import SelectTrainer from './components/training/SelectTrainer';
+import {getLogged, excludeProp} from "./utils";
+import Container from './components/Container';
+
+
+
+
 
 const PrivateRoute = (props) => {
-  let validate = false;
-  if(validate){
-    return <Route {...props} />
-  } else {
-    return <Redirect to="/" />
-  }
-}
 
+    // Новый компонент, который создан с меню
+    let wrappedComponent = Container(props.component, props.title);
+
+    // Проверяем залогинен ли пользователь
+    if (getLogged()){
+
+        // Перенаправляем на закрытый роутинг
+        return <Route {...excludeProp(props, "component")}
+            component={wrappedComponent} />
+    } else {
+
+        // Перенаправляем на страницу логина
+        return <Redirect to="/login" />
+    }
+}
 
 class App extends Component {
   render() {
     return (
         <div>
-          <h2>TRAINEE</h2>
-          <Router>
-            <div className="App">
-                <div className="nav">
-                  <NavLink to="/crossfit/565"
-                           activeClassName="active">CrossFit</NavLink>
-                  <NavLink to="/news/"
-                           activeClassName="active">
-                    News</NavLink>
-                  <NavLink to="/training/karter" activeClassName="active"
-                  >Training</NavLink>
+            {/* Обертка для всего что использует роутинг */}
+            <Router>
+                <div>
+
+                    {/* Изменяющаяся часть роутера */}
+                    <Switch>
+
+                        {/* В зависимости от пути, отрисует компонент */}
+                        <Route path="/login" component={Login} />
+
+                        <Route path="/logout" component={Logout} />
+
+                        <Route path="/signup" component={Signup} />
+
+                        {/* Закрытые роуты */}
+                        <PrivateRoute path="/home" component={SelectTrainer} title="Some Page"/>
+                        <Redirect to="/login"/>
+                    </Switch>
                 </div>
-                <Switch>
-                  <Route path="/crossfit/" component={CrossFit}/>
-                  <Route path="/crossfit/:id" component={CrossFit} />
-                  <PrivateRoute path="/news/" component={News} />
-                  <Route path="/training/:name" component={Training}/>
-                  <Redirect from="/" to="/crossfit/"/>
-                </Switch>
-            </div>
-          </Router>
+            </Router>
+
         </div>
+
     );
   }
-}
+};
 
 export default App;
