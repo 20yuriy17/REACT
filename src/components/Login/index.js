@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import {Button, TextInput, ErrorMessage, Message} from "../ui";
+import {Button, TextInput, ErrorMessage , Header, BackArrow, Title}
+    from "../ui";
+import Select from "../ui/Select";
 import {withRouter, Link} from "react-router-dom";
 import {getLogged} from "../../utils";
 import styled from 'styled-components';
-import UsernameIcon from '../../assets/icons/icon-username.svg'
-import PasswordIcon from '../../assets/icons/icon-password.svg'
-
-import {Arrow,Header,Title,Menu} from '../../components/Container'
-// import Container from '../../components/Container';
+import UsernameIcon from '../../assets/icons/icon-username.svg';
+import PasswordIcon from '../../assets/icons/icon-password.svg';
+//import SmileIcon from '../../assets/icons/icon-smile.svg';
+//import EmailIcon from '../../assets/icons/icon-email.svg';
+//import MoreIcon from '../../assets/icons/icon-more.svg';
 
 
 const media = {
@@ -29,10 +31,9 @@ const SubLogo = styled(Logo)`
     font-size: 40px;
 `;
 
-const Container = styled.div`
+const Wrapper = styled.div`
     display:flex;
     flex-direction: column;
-    
     width: 100%;
     min-height: 100vh;
     background-image: url("../../assets/img/bg-login.jpg");
@@ -61,27 +62,6 @@ const StyledLink = styled(Link)`
     text-decoration: none;
     font-size: 11px;
 `
-
-///////////
-//  const Title = styled.h4`
-//
-//  `
- const Header = styled.header`
-         display: flex;
-         justify-content: space-between;
-         margin-bottom: 20px;
-`
-
- const Arrow = styled.div`
-         transform: rotate(-45deg);
-         border: 4px solid #333;
-         width: 12px;
-         height: 12px;
-         border-right: none;
-         border-bottom: none;
-         box-sizing: border-box;
-
-  `
 
 
 // Оборачиваем в withRouter, чтобы получить доступ
@@ -142,10 +122,9 @@ class Login extends Component{
 
     render(){
         return (
-        <Container>
+        <Wrapper>
             <Logo>TNR</Logo>
             <SubLogo>APP</SubLogo>
-
             <InputCenter>
                 <ErrorMessage visible={this.state.visible}>Incorrect Login</ErrorMessage>
                 <TextInput onChange={this.onChange.bind(this, 'login')}
@@ -163,115 +142,58 @@ class Login extends Component{
                         onClick={this.onLogin}>
                     get started
                 </ButtonStart>
-
                 <LinkContainer>
                     <StyledLink to="/signup">Create Account</StyledLink>
                     <StyledLink to="/">Need help?</StyledLink>
                 </LinkContainer>
-
             </InputCenter>
-
-        </Container>
+        </Wrapper>
         )
     }
 
 }
 
 export class SignupLocal extends Component {
-    constructor(props) {
-        super(props);
-
-
-    }
-    state = {
-        status: '',
-        login: '',
-        email:'',
-        password: '',
-
-        visible: false
-    }
-
-
-    onChange = (inputName, event) => {
-
-        // Получили значения инпута
-        let value = event.target.value;
-
-
-        this.setState({
-            // Аналог obj[inputName]
-            // Вместо ключа используем переменную
-            // Получаем через bind, когда привязываем к инпуту событие
-            [inputName]: value
-        })
-    };
-
-    onStatus = () => {
-
-            this.setState({
-                visible: !this.state.visible
-            })
-    }
-
     render(){
         return(
-            <Container>Signup
-
-
+            <Wrapper>
                 <Header>
-                    <Arrow />
-                    {/*<Title>*/}
-                         {/*/!*{title}*!/*/}
-                    {/*</Title>*/}
-                    {/*<Menu/>*/}
+                    <BackArrow theme="light"/>
+                    <Title theme="light">
+                        Create Account
+                    </Title>
                 </Header>
-
-
-
                 <InputCenter>
-                        <Message visible={this.state.visible} onClick={this.onStatus}>
-                            <div onClick={this.onChange.bind(this, 'status')} >Coach</div>
-                            <div onClick={this.onChange.bind(this, 'status')} >Trainee</div>
-                        </Message>
+                    <Select placeholder="Who are you?">
+                        <Select.Option>Coach</Select.Option>
+                        <Select.Option>Trainee</Select.Option>
+                    </Select>
+
+                    <TextInput image={UsernameIcon}
+                               placeholder="Your name"
+                               type="text" />
 
                     <TextInput
-                               onClick={this.onStatus}
-                               value={this.state.status} placeholder="Who are you?"
-                               type="text"
-                               image={UsernameIcon}
-                    />
+                               placeholder="Your email"
+                               type="email" />
 
-                    <TextInput onChange={this.onChange.bind(this, 'login')}
-                               value={this.state.login} placeholder="login"
-                               type="text"
-                               image={UsernameIcon}
-                    />
-
-                    <TextInput onChange={this.onChange.bind(this, 'email')}
-                               value={this.state.email} placeholder="Your e-mail"
-                               type="text"
-                               image={UsernameIcon}
-                    />
-
-                    <TextInput onChange={this.onChange.bind(this, 'password')}
-                               value={this.state.password}
-                               image={PasswordIcon}
-                               placeholder="password" type="password"
-                    />
+                    <TextInput image={PasswordIcon}
+                               placeholder="Password"
+                               type="password" />
 
                     <ButtonStart type="button"
                                  onClick={this.onLogin}>
                         get started
                     </ButtonStart>
+                    <LinkContainer>
+                        <StyledLink to="/login">Login</StyledLink>
+                        <StyledLink to="/">Need help?</StyledLink>
+                    </LinkContainer>
                 </InputCenter>
-
-
-            </Container>
+            </Wrapper>
         )
     }
 }
-
 
 // Оборачиваем в withRouter, чтобы получить доступ
 // к this.props.history, нужен для редиректа
